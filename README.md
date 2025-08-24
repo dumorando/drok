@@ -1,13 +1,15 @@
 # drok
-An AI discord bot
+An AI discord bot, similar to twitters grok.<br>
+This is still in a **VERY EARLY** stage! this only supports being pinged by a reply to a message, so dont try to put it on your discord server.<br>
+The code is also verry messy, considering this is basically my first typescript project, and also my first AI-sdk project.
 
-Not related to any technology companies
+A hosted version is coming soon (if i remember about this project lol)
 
-Any correspondence is 100% coincidental
+# Screenshots
+<img width="1236" height="220" alt="image" src="https://github.com/user-attachments/assets/d27e8822-ef5a-4bcd-ae99-b480d6cc91b8" />
 
-
-
-
+# Installation
+Please note that this project probably will never explicitly support node, as bun is my runtime of choice.<br>
 To install dependencies:
 
 ```bash
