@@ -24,6 +24,21 @@ client.on("messageCreate", async(m)=>{
             const replychain = await GetReplyChain(m);
             const builtprompt = Promptbuilder(m.type, model, m.author, client.user.mention, m, replychain);
             
+            await m.channel?.sendTyping();
+            await m.channel?.createMessage({
+                content: await SendMessage(builtprompt, model),
+                messageReference: {
+                    messageID: m.id
+                }
+            });
+        }
+    }
+
+    if (m.type === MessageTypes.DEFAULT) {
+        if (m.content.includes(client.user.mention)) {
+            const builtprompt = Promptbuilder(m.type, model, m.author, client.user.mention, m);
+            
+            await m.channel?.sendTyping();
             await m.channel?.createMessage({
                 content: await SendMessage(builtprompt, model),
                 messageReference: {
