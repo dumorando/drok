@@ -54,7 +54,7 @@ const toolparent = () => {
                         });
                         const actualresults: ExaResponse = (await results.json()) as ExaResponse;
 
-                        console.log(actualresults);
+                        // console.log(actualresults);
                         return actualresults.results.map(result => {
                             return {
                                 title: result.title,

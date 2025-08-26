@@ -30,10 +30,10 @@ async function SendMessage(prompt: string, model: Model) {
     const toolsummary = tp.getToolUsage().map(toolcall => {
         if (toolcall.type == "math") {
             const r = toolcall.equation;
-            return `🧮 Solved equation "${r}"`;
+            return `🧮 Solved equation "\`${r}\`"`;
         } else {
             const r = toolcall.query;
-            return `🌐 Searched for "${r}"`
+            return `🌐 Searched for "\`${r}\`"`;
         }
     }).join(', ');
 
