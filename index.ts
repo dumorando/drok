@@ -25,17 +25,34 @@ client.on("messageCreate", async (m) => {
     }
 
     if (channel.type === ChannelTypes.DM) {
-        const builtprompt = Promptbuilder(m.type, model, m.author, client.user.mention, m);
+        if (m.type === MessageTypes.DEFAULT) {
+            const builtprompt = Promptbuilder(m.type, model, m.author, client.user.mention, m);
 
-        await m.channel?.sendTyping();
-        await m.channel?.createMessage({
-            content: await SendMessage(builtprompt, model),
-            messageReference: {
-                messageID: m.id
-            }
-        });
+            await m.channel?.sendTyping();
+            await m.channel?.createMessage({
+                content: await SendMessage(builtprompt, model),
+                messageReference: {
+                    messageID: m.id
+                }
+            });
 
-        return;
+            return;
+        }
+
+        if (m.type === MessageTypes.REPLY) {
+            const replychain = await GetReplyChain(m);
+            const builtprompt = Promptbuilder(m.type, model, m.author, client.user.mention, m, replychain);
+
+            await m.channel?.sendTyping();
+            await m.channel?.createMessage({
+                content: await SendMessage(builtprompt, model),
+                messageReference: {
+                    messageID: m.id
+                }
+            });
+
+            return;
+        }
     }
 
     if (m.type === MessageTypes.REPLY) {
