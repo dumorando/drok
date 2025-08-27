@@ -8,6 +8,11 @@ A hosted version is coming soon (if i remember about this project lol)
 # Screenshots
 <img width="1236" height="220" alt="image" src="https://github.com/user-attachments/assets/d27e8822-ef5a-4bcd-ae99-b480d6cc91b8" />
 
+# Allowed forms of input
+- DMs
+- Regular messages containing a mention to @Drok
+- Replies containing a mention to @Drok
+
 # Installation
 Please note that this project probably will never explicitly support node, as bun is my runtime of choice.<br>
 To install dependencies:
