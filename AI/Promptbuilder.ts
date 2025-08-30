@@ -3,7 +3,7 @@ import { type Model } from '../Types/Model';
 
 
 
-function BuildPrompt(type: MessageTypes, model: Model, user: User, mention: string, message: Message, replyHistory?: Message[]) {
+function BuildPrompt(type: MessageTypes, model: Model, user: User, mention: string, message: Message, replyHistory?: Message[], history?: Message[]) {
     let baseprompt = `
 You are @drok on Discord, a version of ${model.friendlyName} built by dumorando on Discord.
 Your Discord mention tag is ${mention}.
@@ -23,6 +23,16 @@ Current status: ${type === MessageTypes.REPLY ? "REPLY" : "CASUAL"}
         replyHistory?.forEach((msg, i) => {
             baseprompt += `
 Index ${i} of reply thread:
+User details: username:${msg.author.username} displayname:${msg.author.globalName}
+Message: ${msg.content}
+            `;
+        });
+    }
+
+    if (history && history.length > 0) {
+        history?.forEach((msg, i) => {
+            baseprompt += `
+Index ${i} of recent messages:
 User details: username:${msg.author.username} displayname:${msg.author.globalName}
 Message: ${msg.content}
             `;

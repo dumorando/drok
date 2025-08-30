@@ -26,7 +26,11 @@ client.on("messageCreate", async (m) => {
 
     if (channel.type === ChannelTypes.DM) {
         if (m.type === MessageTypes.DEFAULT) {
-            const builtprompt = Promptbuilder(m.type, model, m.author, client.user.mention, m);
+            const recent = await m.channel?.getMessages({ limit: 8, before: m.id });
+            const history = (recent ?? [])
+                .filter(msg => !!msg.content)
+                .reverse();
+            const builtprompt = Promptbuilder(m.type, model, m.author, client.user.mention, m, undefined, history);
 
             await m.channel?.sendTyping();
             await m.channel?.createMessage({
