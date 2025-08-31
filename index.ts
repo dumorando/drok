@@ -3,6 +3,7 @@ import Promptbuilder from './AI/Promptbuilder';
 import { type Model } from './Types/Model';
 import SendMessage from './AI/Messageservice';
 import GetReplyChain from './Misc/GetReplyChain';
+import ClassifyPrompt from './AI/Classifier';
 
 const client = new Client({ auth: `Bot ${process.env.DISCORD_TOKEN}` });
 const model: Model = {
