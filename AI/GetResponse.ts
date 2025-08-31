@@ -5,12 +5,12 @@ import BuildPromptWithClassification from "./BuildPromptWithClassification";
 import SendMessage from "./Responses/Reasoner";
 import RegularSendMessage from './Responses/Regular';
 
-export default async function GetClassifiedResponse(prompt: ClassifiedPromptBuilderOutput): Promise<AIResponse> {
+export default async function GetClassifiedResponse(prompt: ClassifiedPromptBuilderOutput, images?: string[]): Promise<AIResponse> {
     if (prompt.mode === DrokMode.expert) {
         //use reasoner
-        return await SendMessage(prompt.built_prompt, { name: 'deepseek-reasoner', friendlyName: 'DeepSeek V3.1 Reasoner' }, prompt.mode);
+        return await SendMessage(prompt.built_prompt, { name: 'deepseek-reasoner', friendlyName: 'DeepSeek V3.1 Reasoner' }, prompt.mode, images);
     } else {
         //use regular
-        return await RegularSendMessage(prompt.built_prompt, { name: 'deepseek-chat', friendlyName: 'DeepSeek V3.1' }, prompt.mode);
+        return await RegularSendMessage(prompt.built_prompt, { name: 'deepseek-chat', friendlyName: 'DeepSeek V3.1' }, prompt.mode, images);
     }
 }

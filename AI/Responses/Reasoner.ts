@@ -4,12 +4,21 @@ import toolparent from "../Tools";
 import { deepseek } from "@ai-sdk/deepseek";
 import type { AIResponse } from "../../Types/AIResponses";
 
-async function SendMessage(prompt: string, model: Model, mode: DrokMode): Promise<AIResponse> {
+async function SendMessage(prompt: string, model: Model, mode: DrokMode, images?: string[]): Promise<AIResponse> {
     const tp = toolparent();
+    const imgs: string[] = images ?? [];
     const { text } = await generateText({
         model: deepseek(model.name),
         tools: tp.tools,
-        prompt,
+        messages: [
+            {
+                role: "user",
+                content: [
+                    { type: 'text', text: prompt },
+                    ...imgs.map(url => ({ type: "image" as const, image: url as string }))
+                ]
+            }
+        ],
         temperature: 0,
         stopWhen: stepCountIs(10)
     });
