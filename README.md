@@ -9,6 +9,13 @@ A hosted version is coming soon (if i remember about this project lol)
 # Screenshots
 <img width="1236" height="220" alt="image" src="https://github.com/user-attachments/assets/d27e8822-ef5a-4bcd-ae99-b480d6cc91b8" />
 
+# Modes
+The messages are routed to the best mode available using Kimi K2 free on openrouter.
+- Expert (uses deepseek-reasoner with temperature 0, is amazing for math/programming)
+- Creative (uses deepseek-chat with a high temperature, is good for... creative)
+- Fast (uses deepseek-chat, fallback/default)
+
+
 # Allowed forms of input
 - DMs
 - Regular messages containing a mention to @Drok

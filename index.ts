@@ -1,14 +1,20 @@
-import { ChannelTypes, Client, MessageTypes } from 'oceanic.js';
-import Promptbuilder from './AI/Promptbuilder';
-import { type Model } from './Types/Model';
-import SendMessage from './AI/Messageservice';
+import { Attachment, ChannelTypes, Client, Message, MessageTypes, type File, type MessageAttachment } from 'oceanic.js';
+import { DrokMode, type Model } from './Types/Model';
 import GetReplyChain from './Misc/GetReplyChain';
 import ClassifyPrompt from './AI/Classifier';
+import BuildPromptWithClassification from './AI/BuildPromptWithClassification';
+import GetClassifiedResponse from './AI/GetResponse';
+import { GetModeFriendlyName } from './Misc/GetModeFriendlyName';
 
 const client = new Client({ auth: `Bot ${process.env.DISCORD_TOKEN}` });
-const model: Model = {
+const regularModel: Model = {
     friendlyName: 'DeepSeek V3.1',
     name: 'deepseek-chat'
+};
+
+const reasonerModel: Model = {
+    friendlyName: 'DeepSeek V3.1 Reasoner',
+    name: 'deepseek-reasoner'
 };
 
 client.on("ready", async () => {
@@ -31,29 +37,79 @@ client.on("messageCreate", async (m) => {
             const history = (recent ?? [])
                 .filter(msg => !!msg.content)
                 .reverse();
-            const builtprompt = Promptbuilder(m.type, model, m.author, client.user.mention, m, undefined, history);
-
             await m.channel?.sendTyping();
-            await m.channel?.createMessage({
-                content: await SendMessage(builtprompt, model),
-                messageReference: {
-                    messageID: m.id
-                }
+            const prompt = await BuildPromptWithClassification({
+                messageType: m.type,
+                model: { reasoner: reasonerModel, regular: regularModel },
+                author: m.author,
+                botMention: client.user.mention,
+                message: m,
+                history
+            });
+            let message: Message | undefined;
+            
+            message = await m.channel?.createMessage({
+                content: prompt.mode === DrokMode.expert ? `<a:loader:1411546876385431713> Reasoning..\n\nUsing **${GetModeFriendlyName(prompt.mode)}**` : `<a:loader:1411546876385431713> Generating..\n\nUsing **${GetModeFriendlyName(prompt.mode)}**`,
+                messageReference: { messageID: m.id }
+            });
+
+            const content = (await GetClassifiedResponse(prompt)).output;
+            let friendlyContent = content;
+            let files: File[] = [];
+            if (content.length >= 1500) {
+                friendlyContent = `${friendlyContent.slice(0, 1500)}..
+
+**Character limit reached.** The remainder of the content is below.`;
+
+                files.push({
+                    name: 'message.md',
+                    contents: Buffer.from(content, 'utf8')
+                });
+            }
+
+            await message?.edit({
+                content: friendlyContent,
+                files
             });
 
             return;
         }
 
         if (m.type === MessageTypes.REPLY) {
-            const replychain = await GetReplyChain(m);
-            const builtprompt = Promptbuilder(m.type, model, m.author, client.user.mention, m, replychain);
-
             await m.channel?.sendTyping();
-            await m.channel?.createMessage({
-                content: await SendMessage(builtprompt, model),
-                messageReference: {
-                    messageID: m.id
-                }
+            const replychain = await GetReplyChain(m);
+            const prompt = await BuildPromptWithClassification({
+                messageType: m.type,
+                model: { reasoner: reasonerModel, regular: regularModel },
+                author: m.author,
+                botMention: client.user.mention,
+                message: m,
+                replyChain: replychain
+            });
+            let message: Message | undefined;
+            
+            message = await m.channel?.createMessage({
+                content: prompt.mode === DrokMode.expert ? `<a:loader:1411546876385431713> Reasoning..\n\nUsing **${GetModeFriendlyName(prompt.mode)}**` : `<a:loader:1411546876385431713> Generating..\n\nUsing **${GetModeFriendlyName(prompt.mode)}**`,
+                messageReference: { messageID: m.id }
+            });
+
+            const content = (await GetClassifiedResponse(prompt)).output;
+            let friendlyContent = content;
+            let files: File[] = [];
+            if (content.length >= 1500) {
+                friendlyContent = `${friendlyContent.slice(0, 1500)}..
+
+**Character limit reached.** The remainder of the content is below.`;
+
+                files.push({
+                    name: 'message.md',
+                    contents: Buffer.from(content, 'utf8')
+                });
+            }
+
+            await message?.edit({
+                content: friendlyContent,
+                files
             });
 
             return;
@@ -62,30 +118,83 @@ client.on("messageCreate", async (m) => {
 
     if (m.type === MessageTypes.REPLY) {
         if (m.content.includes(client.user.mention)) {
-            const replychain = await GetReplyChain(m);
-            const builtprompt = Promptbuilder(m.type, model, m.author, client.user.mention, m, replychain);
-
             await m.channel?.sendTyping();
-            await m.channel?.createMessage({
-                content: await SendMessage(builtprompt, model),
-                messageReference: {
-                    messageID: m.id
-                }
+            const replychain = await GetReplyChain(m);
+            const prompt = await BuildPromptWithClassification({
+                messageType: m.type,
+                model: { reasoner: reasonerModel, regular: regularModel },
+                author: m.author,
+                botMention: client.user.mention,
+                message: m,
+                replyChain: replychain
             });
+            let message: Message | undefined;
+            
+            message = await m.channel?.createMessage({
+                content: prompt.mode === DrokMode.expert ? `<a:loader:1411546876385431713> Reasoning..\n\nUsing **${GetModeFriendlyName(prompt.mode)}**` : `<a:loader:1411546876385431713> Generating..\n\nUsing **${GetModeFriendlyName(prompt.mode)}**`,
+                messageReference: { messageID: m.id }
+            });
+
+            const content = (await GetClassifiedResponse(prompt)).output;
+            let friendlyContent = content;
+            let files: File[] = [];
+            if (content.length >= 1500) {
+                friendlyContent = `${friendlyContent.slice(0, 1500)}..
+
+**Character limit reached.** The remainder of the content is below.`;
+
+                files.push({
+                    name: 'message.md',
+                    contents: Buffer.from(content, 'utf8')
+                });
+            }
+
+            await message?.edit({
+                content: friendlyContent,
+                files
+            });
+
+            return;
         }
     }
 
     if (m.type === MessageTypes.DEFAULT) {
         if (m.content.includes(client.user.mention)) {
-            const builtprompt = Promptbuilder(m.type, model, m.author, client.user.mention, m);
-
             await m.channel?.sendTyping();
-            await m.channel?.createMessage({
-                content: await SendMessage(builtprompt, model),
-                messageReference: {
-                    messageID: m.id
-                }
+            const prompt = await BuildPromptWithClassification({
+                messageType: m.type,
+                model: { reasoner: reasonerModel, regular: regularModel },
+                author: m.author,
+                botMention: client.user.mention,
+                message: m
             });
+            let message: Message | undefined;
+            
+            message = await m.channel?.createMessage({
+                content: prompt.mode === DrokMode.expert ? `<a:loader:1411546876385431713> Reasoning..\n\nUsing **${GetModeFriendlyName(prompt.mode)}**` : `<a:loader:1411546876385431713> Generating..\n\nUsing **${GetModeFriendlyName(prompt.mode)}**`,
+                messageReference: { messageID: m.id }
+            });
+
+            const content = (await GetClassifiedResponse(prompt)).output;
+            let friendlyContent = content;
+            let files: File[] = [];
+            if (content.length >= 1500) {
+                friendlyContent = `${friendlyContent.slice(0, 1500)}..
+
+**Character limit reached.** The remainder of the content is below.`;
+
+                files.push({
+                    name: 'message.md',
+                    contents: Buffer.from(content, 'utf8')
+                });
+            }
+
+            await message?.edit({
+                content: friendlyContent,
+                files
+            });
+
+            return;
         }
     }
 });
