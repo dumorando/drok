@@ -1,13 +1,7 @@
-import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
 import type { Model } from "../Types/Model";
 import { generateText, stepCountIs } from "ai";
 import toolparent from "./Tools";
-
-const pollinations = createOpenAICompatible({
-    baseURL: 'https://text.pollinations.ai/v1',
-    name: 'Pollinations',
-    apiKey: process.env.POLLINATIONS_KEY //for better models, but we arent even using them so it kinda doenst matter
-});
+import { deepseek } from "@ai-sdk/deepseek";
 
 interface MathToolInput {
     equation: string;
@@ -20,10 +14,10 @@ interface SearchToolInput {
 async function SendMessage(prompt: string, model: Model) {
     const tp = toolparent();
     const { text } = await generateText({
-        model: pollinations.chatModel(model.name),
+        model: deepseek(model.name),
         tools: tp.tools,
         prompt,
-        stopWhen: stepCountIs(5)
+        stopWhen: stepCountIs(10)
     });
 
 

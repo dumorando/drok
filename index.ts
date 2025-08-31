@@ -1,13 +1,13 @@
 import { ChannelTypes, Client, MessageTypes } from 'oceanic.js';
 import Promptbuilder from './AI/Promptbuilder';
 import { type Model } from './Types/Model';
-import SendMessage from './AI/Pollinations';
+import SendMessage from './AI/Messageservice';
 import GetReplyChain from './Misc/GetReplyChain';
 
 const client = new Client({ auth: `Bot ${process.env.DISCORD_TOKEN}` });
 const model: Model = {
-    friendlyName: 'GPT-4.1',
-    name: 'openai'
+    friendlyName: 'DeepSeek V3.1',
+    name: 'deepseek-chat'
 };
 
 client.on("ready", async () => {
