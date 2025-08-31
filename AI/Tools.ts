@@ -22,17 +22,6 @@ const toolparent = () => {
     let toolusage: ToolUse[] = [];
     return {
         tools: {
-            math: tool({
-                description: 'Solve math equations',
-                inputSchema: z.object({
-                    equation: z.string().describe("The equation to solve")
-                }),
-                execute: async ({ equation }) => {
-                    //is this a waste of bandwith? yes
-                    toolusage.push({type:'math',equation});
-                    return await fetch(`https://api.mathjs.org/v4?expr=${encodeURIComponent(equation)}`).then(a => a.text());
-                }
-            }),
             search: tool({
                 description: 'Search the web for information',
                 inputSchema: z.object({
