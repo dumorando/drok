@@ -1,10 +1,10 @@
 # drok
 An AI discord bot, similar to twitters grok.<br>
-This is still in a **VERY EARLY** stage! this only supports a very barebones amount of features so far, so dont try to put it on your discord server ( yet ;) ).<br>
+
+[try it on my discord server!](https://dumo.lol/discord)
+
 The code is also verry messy, considering this is basically my first typescript project, and also my first AI-sdk project.<br>
 [join my discord!](https://dumo.lol/discord)
-
-A hosted version is coming soon (if i remember about this project lol)
 
 # Screenshots
 <img width="1236" height="220" alt="image" src="https://github.com/user-attachments/assets/d27e8822-ef5a-4bcd-ae99-b480d6cc91b8" />
