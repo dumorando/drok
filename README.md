@@ -9,7 +9,7 @@ The code is also verry messy, considering this is basically my first typescript 
 <img width="1236" height="220" alt="image" src="https://github.com/user-attachments/assets/d27e8822-ef5a-4bcd-ae99-b480d6cc91b8" />
 
 # Modes
-The messages are routed to the best mode available using Kimi K2 free on openrouter.
+The messages are routed to the best mode available using Llama 4 Scout free on openrouter.
 - Expert (uses deepseek-reasoner with temperature 0, is amazing for math/programming)
 - Creative (uses deepseek-chat with a high temperature, is good for... creative)
 - Fast (uses deepseek-chat, fallback/default)

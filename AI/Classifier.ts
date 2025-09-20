@@ -8,7 +8,7 @@ const openrouter = createOpenRouter({
 
 async function ClassifyPrompt(prompt: string) {
     const { text } = await generateText({
-        model: openrouter('moonshotai/kimi-k2:free'),
+        model: openrouter('meta-llama/llama-4-maverick:free'),
         temperature: 0,
         prompt: `Take the following prompt, and determine whether it is a coding/math question, creative question, or in the last case, conversational question.
 
